@@ -1,7 +1,7 @@
 import React from 'react';
 import {
     TrendingUp, FileText, Activity,
-    ShieldAlert, ArrowRight, Fingerprint
+    ShieldAlert, ArrowRight, Fingerprint, ShieldCheck
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import useStore from '../../store/useStore';
