@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, User, Key, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
+import { Search, User, Key, AlertTriangle, CheckCircle, Clock, Download } from 'lucide-react';
 import useStore from '../../store/useStore';
 import { formatINR } from '../../utils/format';
 import BackButton from '../../components/common/BackButton';
@@ -43,6 +43,32 @@ const AnalystBorrowers = () => {
         b.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         b.email?.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    const downloadReport = (borrower, profile) => {
+        const reportData = {
+            borrowerName: borrower.name,
+            borrowerEmail: borrower.email,
+            platformMemberSince: borrower.joinDate || '2024-01-01',
+            riskStatus: profile.riskTag,
+            financials: {
+                totalBorrowed: profile.totalBorrowed,
+                activeLoansCount: profile.activeLoansCount,
+                successfulPayments: profile.totalPaymentsMade,
+                lateMissedPayments: profile.latePayments
+            },
+            generatedAt: new Date().toISOString()
+        };
+
+        const jsonString = JSON.stringify(reportData, null, 2);
+        const blob = new Blob([jsonString], { type: "application/json" });
+        const href = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = href;
+        link.download = `RiskReport_${borrower.name.replace(/\s+/g, '_')}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
 
     return (
         <div className="container" style={{ maxWidth: '100%', paddingBottom: '4rem' }}>
@@ -119,9 +145,16 @@ const AnalystBorrowers = () => {
                             </div>
 
                             {/* Footer */}
-                            <div className="bg-gray-50 px-6 py-3 border-t border-gray-100 text-xs text-gray-500 flex justify-between items-center">
-                                <span>Platform Member since 2024</span>
-                                <span className="flex items-center gap-1"><Key size={12} /> Verified Identity</span>
+                            <div className="bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-between items-center text-sm">
+                                <span className="flex items-center gap-1 text-gray-500 font-medium">
+                                    <Key size={14} /> Verified Identity
+                                </span>
+                                <button
+                                    onClick={() => downloadReport(borrower, profile)}
+                                    className="flex items-center gap-2 text-indigo-600 hover:text-indigo-800 font-bold bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition-colors border border-indigo-100"
+                                >
+                                    <Download size={14} /> Download Report
+                                </button>
                             </div>
                         </div>
                     );

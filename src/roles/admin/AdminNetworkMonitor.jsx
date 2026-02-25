@@ -2,12 +2,12 @@ import React from 'react';
 import useStore from '../../store/useStore';
 import BackButton from '../../components/common/BackButton';
 import { Globe, Activity, Users, CreditCard, TrendingUp } from 'lucide-react';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
 
 const AdminNetworkMonitor = () => {
-    const { users , loans } = useStore();
+    const { users, loans } = useStore();
     const loanRequests = (loans || []).filter(l => l.status !== 'approved' && l.status !== 'active' && l.status !== 'closed');
     const activeLoans = (loans || []).filter(l => l.status === 'approved' || l.status === 'active' || l.status === 'closed');
-
 
     const stats = [
         { label: 'Total Users', value: users.length, icon: <Users size={24} className="text-indigo-500" />, color: '#6366f1' },
@@ -21,8 +21,11 @@ const AdminNetworkMonitor = () => {
         count: (users || []).filter(u => u.role === role).length
     }));
 
+    // Bar Colors mapping based on index
+    const barColors = ['#f59e0b', '#3b82f6', '#10b981', '#6366f1'];
+
     return (
-        <div>
+        <div className="container" style={{ maxWidth: '100%', paddingBottom: '4rem' }}>
             <BackButton />
             <div className="flex items-center gap-3 mb-6">
                 <Globe size={28} className="text-blue-500" />
@@ -42,16 +45,42 @@ const AdminNetworkMonitor = () => {
                 ))}
             </div>
 
-            {/* Role Breakdown */}
-            <div className="saas-card" style={{ padding: '2rem' }}>
-                <h3 className="mb-4">Node Distribution by Role</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {roleBreakdown.map((r, i) => (
-                        <div key={i} style={{ textAlign: 'center', padding: '1rem', background: 'var(--bg)', borderRadius: 'var(--radius-md)' }}>
-                            <p style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text)' }}>{r.count}</p>
-                            <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{r.role}</p>
-                        </div>
-                    ))}
+            {/* Visual Analytics */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                {/* Role Breakdown Chart */}
+                <div className="saas-card" style={{ padding: '2rem' }}>
+                    <h3 className="mb-6 font-bold text-xl text-primary">Node Distribution by Role</h3>
+                    <div className="h-[300px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={roleBreakdown} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(150,150,150,0.1)" />
+                                <XAxis dataKey="role" tick={{ fill: 'var(--text-muted)', fontSize: 12, fontWeight: 'bold' }} axisLine={false} tickLine={false} />
+                                <YAxis hide />
+                                <Tooltip
+                                    contentStyle={{ borderRadius: '12px', background: 'var(--bg)', border: '1px solid var(--border)', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}
+                                    cursor={{ fill: 'rgba(150,150,150,0.05)' }}
+                                />
+                                <Bar dataKey="count" radius={[8, 8, 8, 8]} maxBarSize={60}>
+                                    {roleBreakdown.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={barColors[index % barColors.length]} />
+                                    ))}
+                                </Bar>
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+
+                {/* Role Breakdown Numbers (Original Grid) */}
+                <div className="saas-card" style={{ padding: '2rem' }}>
+                    <h3 className="mb-6 font-bold text-xl text-primary">Raw Node Metrics</h3>
+                    <div className="grid grid-cols-2 gap-4 h-full">
+                        {roleBreakdown.map((r, i) => (
+                            <div key={i} className="flex flex-col justify-center items-center rounded-2xl border" style={{ background: 'var(--bg)', borderColor: 'var(--border)' }}>
+                                <p style={{ fontSize: '2.5rem', fontWeight: 900, color: barColors[i % barColors.length] }}>{r.count}</p>
+                                <p style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '0.5rem' }}>{r.role} Nodes</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

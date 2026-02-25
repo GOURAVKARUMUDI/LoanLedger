@@ -7,7 +7,7 @@ import StatusBadge from '../../components/common/StatusBadge';
 import LenderEarningsCalculator from './LenderEarningsCalculator';
 
 const LenderRequests = () => {
-    const { acceptRequest, rejectRequest, holdRequest, currentUser, lenderBalances, loans } = useStore();
+    const { lenderDecision, currentUser, lenderBalances, loans } = useStore();
     const loanRequests = (loans || []).filter(l => l.status !== 'approved' && l.status !== 'active' && l.status !== 'closed');
 
     const [selectedRequest, setSelectedRequest] = useState(null);
@@ -24,11 +24,11 @@ const LenderRequests = () => {
 
     const handleAction = (id, action) => {
         if (action === 'accept') {
-            acceptRequest(id);
+            lenderDecision(id, 'approved', selectedRequest.isCustom ? null : { interestRate: selectedRequest.interestRate, duration: selectedRequest.duration });
         } else if (action === 'reject') {
-            rejectRequest(id);
+            lenderDecision(id, 'rejected');
         } else if (action === 'hold') {
-            holdRequest(id);
+            lenderDecision(id, 'hold');
         }
         setSelectedRequest(null);
     };

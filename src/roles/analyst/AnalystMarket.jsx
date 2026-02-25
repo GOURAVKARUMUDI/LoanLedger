@@ -3,6 +3,8 @@ import { BarChart3, TrendingUp, AlertCircle, Percent, Activity, Zap, ShieldCheck
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend, BarChart, Bar, Cell } from 'recharts';
 import BackButton from '../../components/common/BackButton';
 
+import useStore from '../../store/useStore';
+
 // Numeric Animation Hook
 const useAnimatedValue = (value) => {
     const [displayValue, setDisplayValue] = useState(value);
@@ -34,14 +36,6 @@ const useAnimatedValue = (value) => {
     return displayValue;
 };
 
-// Generate initial history data outside component (module scope = ok for impure calls)
-const generateInitialHistory = () =>
-    Array.from({ length: 12 }, (_, i) => ({
-        time: `${i}:00`,
-        rate: 6.50 + Math.random() * 0.2,
-        demand: 70 + Math.random() * 20
-    }));
-
 const CHART_COLORS = {
     area: ['#6366f1', '#22d3ee'],
     bar: ['#10b981', '#f59e0b', '#ef4444'],
@@ -65,13 +59,34 @@ const RiskGauge = ({ level }) => {
 };
 
 const AnalystMarket = () => {
+    const { loans } = useStore();
+
+    // Live Market Telemetry from DB
+    const allLoans = loans || [];
+    const activeLoanCount = allLoans.filter(l => l.status === 'active').length;
+    const totalLoanCount = allLoans.length || 1;
+
+    // Create rolling data out of the mock loan data durations
+    const generateRealHistory = () => {
+        const history = [];
+        for (let i = 0; i < 12; i++) {
+            let monthBaseDemand = 70 + (allLoans.length * 2);
+            history.push({
+                time: `${i}:00`,
+                rate: 6.50 + (activeLoanCount * 0.05) + Math.random() * 0.2,
+                demand: monthBaseDemand + Math.random() * 10
+            });
+        }
+        return history;
+    };
+
     // Internal Simulation State — lazy init avoids impure-call-during-render lint
     const [marketData, setMarketData] = useState(() => ({
         rbiRate: 6.50,
-        volatility: 12.4,
-        loanDemand: 88,
-        riskIndex: 2.1,
-        history: generateInitialHistory()
+        volatility: 12.4 + (activeLoanCount * 0.1),
+        loanDemand: 88 + activeLoanCount,
+        riskIndex: 2.1 + (allLoans.filter(l => l.cibilScore < 600).length * 0.5),
+        history: generateRealHistory()
     }));
 
     useEffect(() => {

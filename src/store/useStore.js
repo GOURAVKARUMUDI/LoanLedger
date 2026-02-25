@@ -202,7 +202,11 @@ const useStore = create(
                             }
 
                             if (status === 'rejected') {
-                                return { ...loan, status: 'rejected', color: 'red' };
+                                return { ...loan, status: 'rejected', color: 'red', lenderDecision: 'reject' };
+                            }
+
+                            if (status === 'hold') {
+                                return { ...loan, status: 'lenderHold', color: 'yellow', lenderDecision: 'hold' };
                             }
                         }
                         return loan;
