@@ -4,8 +4,6 @@ import './index.css'
 import App from './App.jsx'
 
 
-// ── Theme Bootstrap (prevents flash) ──
-// Apply saved theme BEFORE React mounts to avoid flicker
 const savedTheme = localStorage.getItem('loan-ledger-storage');
 if (savedTheme) {
   try {

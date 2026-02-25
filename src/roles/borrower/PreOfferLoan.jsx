@@ -14,7 +14,7 @@ const getAvailableCapital = (lenderName, loans) => {
 
 const PreOfferLoan = ({ formData }) => {
     const navigate = useNavigate();
-    const { addLoanRequest, currentUser, offers, loans } = useStore();
+    const { applyLoan, currentUser, offers, loans } = useStore();
 
     const [selectedOffer, setSelectedOffer] = useState(null);
     const [calculatedEmi, setCalculatedEmi] = useState(0);
@@ -32,15 +32,16 @@ const PreOfferLoan = ({ formData }) => {
             return;
         }
 
-        if (Number(formData.amount) > getAvailableCapital(selectedOffer.lender, loans)) {
-            alert(`Requested amount exceeds lender's available capital (${getAvailableCapital(selectedOffer.lender, loans)}).`);
+        if (Number(formData.amount) > getAvailableCapital(selectedOffer.lenderName || selectedOffer.lender, loans)) {
+            alert(`Requested amount exceeds lender's available capital (${getAvailableCapital(selectedOffer.lenderName || selectedOffer.lender, loans)}).`);
             return;
         }
 
-        addLoanRequest({
+        applyLoan({
             isCustom: false,
             type: 'preOffer',
             borrowerName: currentUser.name || 'Unknown Borrower',
+            borrowerId: currentUser.id || 'unknown',
             email: currentUser.email || 'unknown@example.com',
             phone: currentUser.phone || '000-000-0000',
             employment: formData.employment,
@@ -53,8 +54,8 @@ const PreOfferLoan = ({ formData }) => {
             existingLoansCount: Math.floor(Math.random() * 3),
             activeDebt: Math.floor(Math.random() * 50000),
             address: 'Verified Address On File',
-            offerSelected: `${selectedOffer.lender} - ${selectedOffer.interestRate}% for ${selectedOffer.duration}m`,
-            lenderName: selectedOffer.lender,
+            offerSelected: `${selectedOffer.lenderName || selectedOffer.lender} - ${selectedOffer.interestRate}% for ${selectedOffer.duration}m`,
+            lenderName: selectedOffer.lenderName || selectedOffer.lender,
             interestRate: selectedOffer.interestRate,
             duration: selectedOffer.duration,
             expectedEmi: calculatedEmi
@@ -68,10 +69,10 @@ const PreOfferLoan = ({ formData }) => {
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <div>
                 <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, color: 'var(--text-color)', marginBottom: '0.75rem' }}>Select a Pre-Approved Loan Offer</label>
-                {(offers || []).filter(o => o.status === 'approved').length > 0 ? (
+                {(offers || []).filter(o => o.status === 'available').length > 0 ? (
                     <div className="grid grid-cols-1 gap-4">
-                        {(offers || []).filter(o => o.status === 'approved').map((offer) => {
-                            const availableCap = getAvailableCapital(offer.lender, loans);
+                        {(offers || []).filter(o => o.status === 'available').map((offer) => {
+                            const availableCap = getAvailableCapital(offer.lenderName || offer.lender, loans);
                             const isSelected = selectedOffer?.id === offer.id;
 
                             return (
@@ -89,7 +90,7 @@ const PreOfferLoan = ({ formData }) => {
                                     className="hover:border-blue-300"
                                 >
                                     <div className="flex justify-between items-center mb-2">
-                                        <span className="font-bold">{offer.lender}</span>
+                                        <span className="font-bold">{offer.lenderName || offer.lender}</span>
                                         <span className="badge badge-info">{offer.interestRate}% APR</span>
                                     </div>
                                     <div className="grid grid-cols-3 gap-2 text-sm text-secondary">

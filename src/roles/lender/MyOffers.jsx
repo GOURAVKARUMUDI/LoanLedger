@@ -12,7 +12,7 @@ const MyOffers = () => {
     const [editFormData, setEditFormData] = useState({});
 
     // Relaxed filtering to allow dummy data IDs to populate the UI for demo purposes
-    const myOffers = (offers || []).filter(o => o.lenderId === currentUser?.id || String(o.lenderId).startsWith('lender'));
+    const myOffers = (offers || []).filter(o => o.lenderId === currentUser?.id);
 
     const handleEditClick = (offer) => {
         setEditingOffer(offer);

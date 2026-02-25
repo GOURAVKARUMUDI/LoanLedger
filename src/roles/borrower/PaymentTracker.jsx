@@ -8,9 +8,9 @@ const PaymentTracker = () => {
     const { payments, loans, currentUser, makePayment } = useStore();
 
 
-    // Relaxed filtering for dummy data rendering
-    const userPayments = (payments || []).filter(p => p.borrowerId === currentUser?.id || String(p.borrowerId).startsWith('borrower') || !p.borrowerId);
-    const activeLoans = (loans || []).filter(l => (l.borrowerId === currentUser?.id || String(l.borrowerId).startsWith('borrower') || !l.borrowerId) && l.status === 'active');
+    // Strict filtering so users only see their own assigned payments and active loans
+    const userPayments = (payments || []).filter(p => p.borrowerId === currentUser?.id);
+    const activeLoans = (loans || []).filter(l => l.borrowerId === currentUser?.id && l.status === 'active');
 
     const handlePay = (loanId, amount) => {
         makePayment(loanId, amount);

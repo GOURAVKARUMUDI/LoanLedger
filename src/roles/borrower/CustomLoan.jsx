@@ -5,8 +5,7 @@ import BorrowerEMICalculator from './BorrowerEMICalculator';
 
 const CustomLoan = ({ formData }) => {
     const navigate = useNavigate();
-    const { addLoanRequest, currentUser } = useStore();
-
+    const { applyLoan, currentUser } = useStore();
 
     const [customDetails, setCustomDetails] = useState({
         desiredInterestRate: '',
@@ -31,12 +30,13 @@ const CustomLoan = ({ formData }) => {
             return;
         }
 
-        addLoanRequest({
+        applyLoan({
             isCustom: true,
             type: 'custom',
             requestedInterestRate: Number(customDetails.desiredInterestRate),
             duration: Number(customDetails.desiredDuration),
             borrowerName: currentUser.name || 'Unknown Borrower',
+            borrowerId: currentUser.id || 'unknown',
             email: currentUser.email || 'unknown@example.com',
             phone: currentUser.phone || '000-000-0000',
             employment: formData.employment,

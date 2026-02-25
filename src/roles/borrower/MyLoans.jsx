@@ -15,9 +15,9 @@ const MyLoans = () => {
 
     const [filter, setFilter] = useState(isRequestsView ? 'pending' : 'active'); // 'active', 'pending', or 'closed'
 
-    // Relaxed filtering to allow dummy data IDs to populate the UI for demo purposes
-    const userLoans = (loans || []).filter(l => l.borrowerId === currentUser?.id || String(l.borrowerId).startsWith('borrower'));
-    const userRequests = loanRequests.filter(r => r.borrowerId === currentUser?.id || String(r.borrowerId).startsWith('borrower'));
+    // Strict filtering so users only see their own assigned loans
+    const userLoans = (loans || []).filter(l => l.borrowerId === currentUser?.id);
+    const userRequests = loanRequests.filter(r => r.borrowerId === currentUser?.id);
 
     let displayItems = [];
     if (filter === 'pending') {

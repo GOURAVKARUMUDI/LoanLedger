@@ -10,7 +10,7 @@ const LenderActiveLoans = () => {
 
 
     // Relaxed filtering to allow dummy data IDs to populate the UI for demo purposes
-    const activeLoans = (loans || []).filter(l => (l.lenderId === currentUser?.id || String(l.lenderId).startsWith('lender')) && l.status === 'active');
+    const activeLoans = (loans || []).filter(l => l.lenderId === currentUser?.id && l.status === 'active');
 
     return (
         <div className="container" style={{ maxWidth: '100%' }}>

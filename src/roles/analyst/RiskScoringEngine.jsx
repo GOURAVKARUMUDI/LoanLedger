@@ -9,7 +9,7 @@ const RiskScoringEngine = () => {
 
     const [expandedId, setExpandedId] = useState(null);
 
-    const pendingRequests = loanRequests.filter(r => r.status === 'pending');
+    const pendingRequests = loanRequests.filter(r => r.status === 'pending' || r.status === 'pending-analyst');
 
     // Calculate Risk Stats
     const totalPending = pendingRequests.length;
