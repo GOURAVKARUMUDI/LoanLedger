@@ -1,0 +1,34 @@
+/* ============================================================
+   INDEX.CSS — Entry point. Imports modular CSS architecture.
+   ============================================================
+
+   ARCHITECTURE:
+   ┌─ styles/base.css        → CSS variables (light + dark), reset, body
+   ├─ styles/theme.css       → Glass effects, section backgrounds, dark overrides
+   ├─ styles/components.css  → All UI components: buttons, cards, badges, inputs, tables, etc.
+   ├─ styles/layout.css      → Page wrappers, grids, spacing, typography utilities
+   ├─ styles/animations.css  → @keyframes and animation utility classes
+   └─ modules/               → Role-specific CSS (imported per-dashboard)
+      ├─ common/common.css
+      ├─ borrower/borrower.css
+      ├─ lender/lender.css
+      ├─ analyst/analyst.css
+      └─ admin/admin.css
+   ============================================================ */
+
+@import './styles/base.css';
+@import './styles/theme.css';
+@import './styles/components.css';
+@import './styles/layout.css';
+@import './styles/animations.css';
+
+/* Shared module */
+@import './modules/common/common.css';
+
+/* Role modules — imported here globally; can be moved to per-dashboard imports */
+@import './modules/borrower/borrower.css';
+@import './modules/lender/lender.css';
+@import './modules/analyst/analyst.css';
+@import './modules/admin/admin.css';
+
+/* End of index.css — all styles are in the modular files above */

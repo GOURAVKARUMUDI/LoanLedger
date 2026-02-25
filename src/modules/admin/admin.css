@@ -1,0 +1,83 @@
+/* ============================================================
+   ADMIN.CSS — Admin role-specific styles
+   ============================================================ */
+
+/* System status strip */
+.admin-status-strip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: var(--radius-md);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #10b981;
+}
+
+/* User table row avatar */
+.admin-user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 800;
+    font-size: 0.875rem;
+    flex-shrink: 0;
+}
+
+/* Audit log row */
+.admin-audit-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-md);
+    transition: background 0.2s ease;
+    cursor: default;
+}
+
+.admin-audit-row:hover {
+    background: var(--bg);
+}
+
+/* Analytics funnel stage labels */
+.admin-funnel-label {
+    text-align: center;
+}
+
+.admin-funnel-label p:first-child {
+    font-size: 0.625rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+}
+
+.admin-funnel-label p:last-child {
+    font-size: 1.125rem;
+    font-weight: 900;
+    color: var(--text);
+}
+
+/* KPI progress strip */
+.admin-kpi-strip {
+    height: 4px;
+    width: 100%;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.admin-kpi-strip-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 1s var(--ease-smooth);
+}

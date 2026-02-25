@@ -1,0 +1,108 @@
+/* ============================================================
+   THEME.CSS — Glass effects, role section backgrounds, dark overrides
+   ============================================================ */
+
+/* ── Glass Effect ────────────────────────────────────────────── */
+.glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="dark"] .glass {
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ── Role Section Backgrounds ────────────────────────────────── */
+.section-borrower {
+    background:
+        radial-gradient(circle at top left, rgba(99, 102, 241, 0.08), transparent 40%),
+        radial-gradient(circle at bottom right, rgba(139, 92, 246, 0.05), transparent 40%),
+        var(--bg);
+    border-radius: var(--radius-xl);
+    padding: 40px;
+}
+
+.section-lender {
+    background:
+        radial-gradient(circle at top left, rgba(16, 185, 129, 0.08), transparent 40%),
+        radial-gradient(circle at bottom right, rgba(5, 150, 105, 0.05), transparent 40%),
+        var(--bg);
+    border-radius: var(--radius-xl);
+    padding: 40px;
+}
+
+.section-analyst {
+    background:
+        radial-gradient(circle at top left, rgba(245, 158, 11, 0.08), transparent 40%),
+        radial-gradient(circle at bottom right, rgba(217, 119, 6, 0.05), transparent 40%),
+        var(--bg);
+    border-radius: var(--radius-xl);
+    padding: 40px;
+}
+
+.section-admin {
+    background:
+        radial-gradient(circle at top left, rgba(79, 70, 229, 0.08), transparent 40%),
+        radial-gradient(circle at bottom right, rgba(6, 182, 212, 0.05), transparent 40%),
+        var(--bg);
+    border-radius: var(--radius-xl);
+    padding: 40px;
+}
+
+/* ── Logo & Asset Theme Switching ────────────────────────────── */
+.logo-invert {
+    transition: filter 0.3s ease;
+}
+
+[data-theme="light"] .logo-invert {
+    filter: none;
+}
+
+[data-theme="dark"] .logo-invert {
+    filter: brightness(0) invert(1);
+}
+
+/* ── Dark Mode: Override Hardcoded Tailwind/HTML Classes ──────── */
+[data-theme="dark"] .bg-white {
+    background-color: var(--surface) !important;
+}
+
+[data-theme="dark"] .bg-gray-50,
+[data-theme="dark"] .bg-gray-100,
+[data-theme="dark"] .bg-slate-50 {
+    background-color: var(--bg) !important;
+}
+
+[data-theme="dark"] .text-gray-900,
+[data-theme="dark"] .text-gray-800,
+[data-theme="dark"] .text-gray-700,
+[data-theme="dark"] .text-gray-600,
+[data-theme="dark"] .text-slate-800 {
+    color: var(--text) !important;
+}
+
+[data-theme="dark"] .text-gray-500,
+[data-theme="dark"] .text-gray-400,
+[data-theme="dark"] .text-slate-500 {
+    color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .border-gray-100,
+[data-theme="dark"] .border-gray-200,
+[data-theme="dark"] .border-gray-50 {
+    border-color: var(--border) !important;
+}
+
+/* ── Global Smooth Transitions ───────────────────────────────── */
+*,
+*::before,
+*::after {
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        color 0.3s ease,
+        box-shadow 0.3s ease;
+}
